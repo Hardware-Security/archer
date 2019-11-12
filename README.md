@@ -45,6 +45,11 @@ In order to use archer, first thing you need is finding all the instructions, go
 
 `sudo ./sifter.py --unk --dis --len --sync --tick -- -P1 -t`
 
-It's really recommended to use the instruction from the processor you're testing on as there are other instructions based on your microarchitecture but in the case if you want to use the previously brute-forced results, you can use the `archer/ArcherSampleResults/instructions.json.zip`.
+It's really recommended to use the instruction from the processor you're testing on as there are other instructions based on your microarchitecture but in the case if you want to use the previously brute-forced results, you can use the `archer/ArcherSampleResults/instructions.json.zip`, don't forget to decompress it first.
+
+In the second place you have to create database tables for saving the results of the analyzer. Install `mysql` and use the SQL file in `archer/ArcherDatabases/` to build the new database.
+
+`sudo apt-get update`
+`sudo apt-get install mysql-server`
 
 
