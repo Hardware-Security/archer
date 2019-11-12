@@ -1,0 +1,29 @@
+STREAMS 1
+TYPE DOUBLE
+FLOPS 1
+BYTES 8
+DESC Double-precision sum of a vector, optimized for AVX
+LOADS 1
+STORES 0
+INSTR_CONST 24
+INSTR_LOOP 11
+UOPS 18
+vxorpd ymm1, ymm1, ymm1
+vmovapd ymm2, ymm1
+vmovapd ymm3, ymm1
+vmovapd ymm4, ymm1
+vmovapd ymm5, ymm1
+vmovapd ymm6, ymm1
+vmovapd ymm7, ymm1
+vmovapd ymm8, ymm1
+LOOP 32
+vaddpd    ymm1, ymm1, [STR0 + GPR1 * 8]
+vaddpd    ymm2, ymm2, [STR0 + GPR1 * 8 + 32]
+vaddpd    ymm3, ymm3, [STR0 + GPR1 * 8 + 64]
+vaddpd    ymm4, ymm4, [STR0 + GPR1 * 8 + 96]
+vaddpd    ymm5, ymm5, [STR0 + GPR1 * 8 + 128]
+vaddpd    ymm6, ymm6, [STR0 + GPR1 * 8 + 160]
+vaddpd    ymm7, ymm7, [STR0 + GPR1 * 8 + 192]
+vaddpd    ymm8, ymm8, [STR0 + GPR1 * 8 + 224]
+
+

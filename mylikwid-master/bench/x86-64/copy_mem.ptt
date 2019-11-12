@@ -1,0 +1,21 @@
+STREAMS 2
+TYPE DOUBLE
+FLOPS 0
+BYTES 16
+DESC Double-precision vector copy, only scalar operations but with non-temporal stores
+LOADS 1
+STORES 1
+INSTR_CONST 16
+INSTR_LOOP 11
+UOPS 14
+LOOP 4
+movq    mm0, [STR0 + GPR1 * 8]
+movq    mm1, [STR0 + GPR1 * 8 + 8]
+movq    mm2, [STR0 + GPR1 * 8 + 16]
+movq    mm3, [STR0 + GPR1 * 8 + 24]
+movntq    [STR1 + GPR1 * 8]     , mm0
+movntq    [STR1 + GPR1 * 8 + 8] , mm1
+movntq    [STR1 + GPR1 * 8 + 16], mm2
+movntq    [STR1 + GPR1 * 8 + 24], mm3
+
+

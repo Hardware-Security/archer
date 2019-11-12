@@ -1,0 +1,16 @@
+SHORT Miss ratio for VPU data writes
+
+EVENTSET
+PMC0  VPU_DATA_WRITE
+PMC1  VPU_DATA_WRITE_MISS
+
+METRICS
+Runtime (RDTSC) [s] time
+VPU write miss ratio PMC1/PMC0
+
+LONG
+Formula:
+VPU write miss ratio = PMC1/PMC0
+--
+This performance group determines the ratio between writes and writes that miss
+the cache and are issued by the VPU.

@@ -1,0 +1,54 @@
+#define STR0 ARG2
+#define STR1 ARG3
+#define STR2 ARG4
+#define STR3 ARG5 
+#define STR4 ARG6 
+
+#define STR5 GPR9 
+#define STR6 GPR10 
+#define STR7 GPR11 
+#define STR8 GPR12 
+#define STR9 GPR13 
+#define STR10 GPR14 
+
+
+DEFINE DOUBLE SCALAR  1.0
+DEFINE SINGLE SSCALAR  1.0
+DEFINE INT ISCALAR  1
+DEFINE INT OMM  0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+DEFINE INT IOMM  0,16,32,48,64,80,96,128,144,160,176,192,208,224,240,256
+DEFINE INT TOMM  0,2,4,6,16,18,20,22,32,34,36,38,48,50,52,54
+
+START LOCAL
+
+FUNC sum_avx512
+{
+vpxorq zmm1, zmm1, zmm1
+vmovapd zmm2, zmm1
+vmovapd zmm3, zmm1
+vmovapd zmm4, zmm1
+vmovapd zmm5, zmm1
+vmovapd zmm6, zmm1
+vmovapd zmm7, zmm1
+vmovapd zmm8, zmm1
+
+
+
+LOOP .loop 64 GPR6 {
+vaddpd    zmm1, zmm1, [STR0 + GPR1 * 8]
+vaddpd    zmm2, zmm2, [STR0 + GPR1 * 8 + 64]
+vaddpd    zmm3, zmm3, [STR0 + GPR1 * 8 + 128]
+vaddpd    zmm4, zmm4, [STR0 + GPR1 * 8 + 192]
+vaddpd    zmm5, zmm5, [STR0 + GPR1 * 8 + 256]
+vaddpd    zmm6, zmm6, [STR0 + GPR1 * 8 + 320]
+vaddpd    zmm7, zmm7, [STR0 + GPR1 * 8 + 384]
+vaddpd    zmm8, zmm8, [STR0 + GPR1 * 8 + 448]
+
+
+
+}
+
+}
+
+STOP LOCAL
+

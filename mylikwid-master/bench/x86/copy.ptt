@@ -1,0 +1,24 @@
+STREAMS 2
+TYPE DOUBLE
+FLOPS 0
+BYTES 16
+DESC Double-precision vector copy, only scalar operations
+LOADS 1
+STORES 1
+INSTR_CONST 16
+INSTR_LOOP 11
+UOPS 14
+mov    GPR6, ARG1
+mov    GPR2, STR0
+mov    GPR3, STR1
+LOOP 4
+movsd     FPR1, [GPR2 + GPR1 * 8]
+movsd     FPR2, [GPR2 + GPR1 * 8 + 8]
+movsd     FPR3, [GPR2 + GPR1 * 8 + 16]
+movsd     FPR4, [GPR2 + GPR1 * 8 + 24]
+movsd     [GPR3 + GPR1 * 8]     , FPR1
+movsd     [GPR3 + GPR1 * 8 + 8], FPR2
+movsd     [GPR3 + GPR1 * 8 + 16], FPR3
+movsd     [GPR3 + GPR1 * 8 + 24], FPR4
+
+

@@ -1,0 +1,38 @@
+.TH LIKWID-SETFREQ 1 <DATE> likwid\-<VERSION>
+.SH NAME
+likwid-setFreq \- Mediator for
+.B likwid-setFrequencies(1)
+that performs the actual setting of CPU cores' frequency and governor.
+.SH SYNOPSIS
+.B likwid-setFreq
+.IR <coreId>
+.IR <command>
+.IR <frequency|governor>
+
+.SH OPTIONS
+.TP
+.B <command>
+Valid commands are
+.B cur
+,
+.B min
+,
+.B max
+and
+.B gov
+
+.SH DESCRIPTION
+.B likwid-setFreq
+is a command line application that mediates the request from
+.B likwid-setFrequencies(1)
+because setting a CPU core's frequency and/or governor requires root privileges. This executable must be suid-root.
+.B likwid-setFreq
+works only with the kernel module acpi-cpufreq. The recent intel_pstate module does not allow to set fixed frequencies.
+
+
+.SH AUTHOR
+Written by Thomas Roehl <thomas.roehl@googlemail.com>.
+.SH BUGS
+Report Bugs on <https://github.com/RRZE-HPC/likwid/issues>.
+.SH "SEE ALSO"
+likwid-setFrequencies(1)

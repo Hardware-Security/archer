@@ -1,0 +1,29 @@
+STREAMS 1
+TYPE DOUBLE
+FLOPS 1
+BYTES 8
+DESC Double-precision sum of a vector, optimized for AVX-512
+LOADS 1
+STORES 0
+INSTR_CONST 24
+INSTR_LOOP 11
+UOPS 18
+vpxorq zmm1, zmm1, zmm1
+vmovapd zmm2, zmm1
+vmovapd zmm3, zmm1
+vmovapd zmm4, zmm1
+vmovapd zmm5, zmm1
+vmovapd zmm6, zmm1
+vmovapd zmm7, zmm1
+vmovapd zmm8, zmm1
+LOOP 64
+vaddpd    zmm1, zmm1, [STR0 + GPR1 * 8]
+vaddpd    zmm2, zmm2, [STR0 + GPR1 * 8 + 64]
+vaddpd    zmm3, zmm3, [STR0 + GPR1 * 8 + 128]
+vaddpd    zmm4, zmm4, [STR0 + GPR1 * 8 + 192]
+vaddpd    zmm5, zmm5, [STR0 + GPR1 * 8 + 256]
+vaddpd    zmm6, zmm6, [STR0 + GPR1 * 8 + 320]
+vaddpd    zmm7, zmm7, [STR0 + GPR1 * 8 + 384]
+vaddpd    zmm8, zmm8, [STR0 + GPR1 * 8 + 448]
+
+

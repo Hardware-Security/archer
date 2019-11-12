@@ -1,0 +1,230 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $FILTERTYPE = 'xml';
+
+my $NL = "\n";
+
+if ($#ARGV < 1) {
+    die "Filter failed! Please report bug.\n";
+}
+
+my $filename = $ARGV[0];
+my $fileType  = $ARGV[1];
+my $infile = $filename;
+
+if (! -e $filename)
+{
+    die "Input file does not exist!\n";
+}
+
+open INFILE,"<$filename";
+$filename =~ s/\.tmp/\.$FILTERTYPE/;
+open OUTFILE,">$filename";
+
+
+if ($fileType eq 'topology') {
+    my $region = 'topo';
+    my $indomain = 0;
+    print OUTFILE '<node>'.$NL;
+    print OUTFILE '<info>'.$NL;
+
+    while (<INFILE>) {
+        if (/STRUCT,Cache Topology L1/) {
+            $region = 'cache';
+            print OUTFILE '<caches>'.$NL;
+        } elsif (/STRUCT,NUMA Topology/) {
+            print OUTFILE '</caches>'.$NL;
+            print OUTFILE '<numa>'.$NL;
+            $region = 'numa';
+        }
+
+        if ($region eq 'topo') {
+            if (/(CPU type):,([\w ]*),/) {
+                print OUTFILE '<cpu>'.$2.'</cpu>'.$NL;
+            } elsif (/CPU name:,([^,]+),/) {
+                print OUTFILE '<name>'.$1.'</name>'.$NL;
+            } elsif (/CPU stepping:,(\d+),/) {
+                print OUTFILE '<stepping>'.$1.'</stepping>'.$NL;
+            } elsif (/CPU clock:,([\d.]+) GHz/) {
+                print OUTFILE '<clock>'.$1.'</clock>'.$NL;
+            } elsif (/(Sockets):,(\d+),/) {
+                print OUTFILE '<socketsPerNode>'.$2.'</socketsPerNode>'.$NL;
+            } elsif (/(Cores per socket):,(\d+),/) {
+                print OUTFILE '<coresPerSocket>'.$2.'</coresPerSocket>'.$NL;
+            } elsif (/(Threads per core):,(\d+),/) {
+                print OUTFILE '<threadsPerCore>'.$2.'</threadsPerCore>'.$NL;
+            } elsif (/HWThread,Thread,Core,Socket,Available/) {
+                print OUTFILE '</info>'.$NL;
+                print OUTFILE '<threads>'.$NL;
+            } elsif (/(\d+),(\d+),(\d+),(\d+),/) {
+                #TODO Build tree for XML output from table!
+                print OUTFILE '<thread>'.$NL;
+                print OUTFILE '<id>'.$1.'</id>'.$NL;
+                print OUTFILE '<threadid>'.$2.'</threadid>'.$NL;
+                print OUTFILE '<coreid>'.$3.'</coreid>'.$NL;
+                print OUTFILE '<socketid>'.$4.'</socketid>'.$NL;
+                print OUTFILE '</thread>'.$NL;
+            } elsif (/STRUCT,Sockets,/) {
+                print OUTFILE '</threads>'.$NL;
+                $region = 'cache';
+            }
+        } elsif ($region eq 'cache') {
+            if (/(Size):,(\d+) ([kMB]*)/) {
+                my $size = $2;
+                if ($3 eq 'MB') {
+                    $size *= 1024;
+                }
+                print OUTFILE '<size>'.$size.'</size>'.$NL;
+            } elsif (/(Cache groups):,([\d ]+),/) {
+                print OUTFILE '</cache>'.$NL;
+            } elsif (/Type:,(\w+) cache,/) {
+                print OUTFILE '<type>'.lc $1.'</type>'.$NL;
+            } elsif (/(Associativity):,(\d+)/) {
+                print OUTFILE '<associativity>'.$2.'</associativity>'.$NL;
+            } elsif (/(Number of sets):,(\d+)/) {
+                print OUTFILE '<sets>'.$2.'</sets>'.$NL;
+            } elsif (/(Cache line size):,(\d+)/) {
+                print OUTFILE '<linesize>'.$2.'</linesize>'.$NL;
+            } elsif (/Shared by threads:,(\d+),/) {
+                print OUTFILE '<sharedby>'.$1.'</sharedby>'.$NL;
+            } elsif (/Cache type:,Inclusive/) {
+                print OUTFILE '<inclusive>true</inclusive>'.$NL;
+            } elsif (/Cache type:,Non Inclusive/) {
+                print OUTFILE '<inclusive>false</inclusive>'.$NL;
+            } elsif (/(Level):,(\d+)/) {
+                print OUTFILE '<cache>'.$NL;
+                print OUTFILE '<level>'.$2.'</level>'.$NL;
+            }
+        } elsif ($region eq 'numa') {
+            if (/Domain:,(\d+),/) {
+                if ($indomain )
+                {
+                    print OUTFILE '</domain>'.$NL;
+                }
+                print OUTFILE '<domain>'.$NL;
+                print OUTFILE '<id>'.$1.'</id>'.$NL;
+                $indomain = 1
+            } elsif (/Free memory:,([\d.]+) MB,/) {
+                print OUTFILE '<freememory>'.$1.'</freememory>'.$NL;
+            } elsif (/Total memory:,([\d.]+) MB,/) {
+                print OUTFILE '<totalmemory>'.$1.'</totalmemory>'.$NL;
+            } elsif (/Processors:,([\d, ]+)/) {
+                print OUTFILE '<processors>'.$1.'</processors>'.$NL;
+            }
+        }
+    }
+    if ($indomain)
+    {
+        print OUTFILE '</domain>'.$NL;
+    }
+
+    print OUTFILE '</numa>'.$NL;
+    print OUTFILE '</node>'.$NL;
+} elsif ($fileType eq 'perfctr') {
+    my $header = 0;
+    my @col;
+    my @cpus;
+    my $region = 'info';
+    my $group = "1";
+    print OUTFILE '<perfctr>'.$NL;
+    while (<INFILE>) {
+        if (/TABLE,Info/) {
+            $region = 'info';
+            print OUTFILE '<info>'.$NL;
+        } elsif (/TABLE,Group (\d+) Raw/) {
+            $group = $1;
+            if (/Stat/) {
+                $region = '';
+            } else {
+                $region = 'raw';
+                if ($region eq 'info') {
+                    print OUTFILE '</info>'.$NL;
+                }
+                print OUTFILE '<group'.$group.'>'.$NL;
+                print OUTFILE '<rawvalues>'.$NL;
+            }
+        } elsif (/TABLE,Group (\d+) Metric/) {
+            $group = $1;
+            if (/Stat/) {
+                if ($region eq 'metric')
+                {
+                    print OUTFILE '</metrics>'.$NL;
+                    print OUTFILE '</group'.$group.'>'.$NL;
+                }
+                $region = '';
+            } else {
+                $region = 'metric';
+                print OUTFILE '</rawvalues>'.$NL;
+                print OUTFILE '<metrics>'.$NL;
+            }
+        }
+        if ($region eq 'info') {
+            if (/(CPU type):,([\w ]*),/) {
+                print OUTFILE '<cpu>'.$2.'</cpu>'.$NL;
+            } elsif (/CPU name:,([^,]+),/) {
+                print OUTFILE '<name>'.$1.'</name>'.$NL;
+            } elsif (/CPU clock:,([\d.]+) GHz/) {
+                print OUTFILE '<clock>'.$1.'</clock>'.$NL;
+            }
+        } elsif ($region eq 'raw') {
+            if (/Event,Counter,(.*)/) {
+                if (not $header) {
+                    @cpus = split(',',$1);
+                    foreach (@cpus) {
+                        s/Core //g;
+                        s/[ ]//g;
+                    }
+                    $header = 1;
+                }
+            } elsif (!/TABLE/) {
+                @col = split(',',$_);
+                print OUTFILE '<event>'.$NL;
+                print OUTFILE '<name>'.$col[0].'</name>'.$NL;
+                print OUTFILE '<counter>'.$col[1].'</counter>'.$NL;
+
+                
+                for (my $i=0; $i<@cpus; $i++) {
+                    
+                    print OUTFILE '<cpu'.$cpus[$i].'>'.$col[2+$i].'</cpu'.$cpus[$i].'>'.$NL;
+                }
+                print OUTFILE '</event>'.$NL;
+            }
+        } elsif ($region eq 'metric') {
+            if ((!/Metric,Core/) and (!/TABLE/)) {
+                @col = split(',',$_);
+                print OUTFILE '<metric>'.$NL;
+                my $name = "";
+                my $unit = "";
+                if ($col[0] =~ /\[.*\]/) {
+                    $col[0] =~ m/(.*)\s\[(.*)\]/;
+                    $name = $1;
+                    $unit = $2
+                } else {
+                    $name = $col[0]
+                }
+                print OUTFILE '<name>'.$name.'</name>'.$NL;
+                if ($unit ne "")
+                {
+                    print OUTFILE '<unit>'.$unit.'</unit>'.$NL;
+                }
+                for (my $i=0; $i<@cpus; $i++) {
+                    print OUTFILE '<cpu'.$cpus[$i].'>'.$col[1+$i].'</cpu'.$cpus[$i].'>'.$NL;
+                }
+                print OUTFILE '</metric>'.$NL;
+            }
+        } elsif (/STAT/) {
+
+        }
+    }
+    print OUTFILE '</perfctr>'.$NL;
+} else {
+    die "Filter failed! Unknown application type $fileType!\n";
+}
+
+unlink($infile);
+close INFILE;
+close OUTFILE;
+

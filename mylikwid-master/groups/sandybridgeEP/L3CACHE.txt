@@ -1,0 +1,36 @@
+SHORT L3 cache miss rate/ratio
+
+EVENTSET
+FIXC0 INSTR_RETIRED_ANY
+FIXC1 CPU_CLK_UNHALTED_CORE
+FIXC2 CPU_CLK_UNHALTED_REF
+PMC0:MATCH0=0x0081:MATCH1=0x3fffc0 OFFCORE_RESPONSE_0_OPTIONS
+PMC1:MATCH0=0x0081:MATCH1=0x1 OFFCORE_RESPONSE_1_OPTIONS
+PMC2 L1D_REPLACEMENT
+
+METRICS
+Runtime (RDTSC) [s] time
+Runtime unhalted [s] FIXC1*inverseClock
+Clock [MHz]  1.E-06*(FIXC1/FIXC2)/inverseClock
+CPI  FIXC1/FIXC0
+L3 request rate PMC1/FIXC0
+L3 miss rate PMC0/FIXC0
+L3 miss ratio PMC0/PMC1
+
+LONG
+Formulas:
+L3 request rate = OFFCORE_RESPONSE_1_OPTIONS:MATCH0=0x0081:MATCH1=0x1/INSTR_RETIRED_ANY
+L3 miss rate = OFFCORE_RESPONSE_0_OPTIONS:MATCH0=0x0081:MATCH1=0x3fffc0/INSTR_RETIRED_ANY
+L3 miss ratio = OFFCORE_RESPONSE_0_OPTIONS:MATCH0=0x0081:MATCH1=0x3fffc0/OFFCORE_RESPONSE_1_OPTIONS:MATCH0=0x0081:MATCH1=0x1
+-
+This group measures the locality of your data accesses with regard to the
+L3 cache. L3 request rate tells you how data intensive your code is
+or how many data accesses you have on average per instruction.
+The L3 miss rate gives a measure how often it was necessary to get
+cache lines from L3 compared to all loaded cache lines in L1.
+And finally L3 miss ratio tells you how many of your
+memory references required a cache line to be loaded from a higher level.
+While the data cache miss rate might be given by your algorithm you should
+try to get data cache miss ratio as low as possible by increasing your cache reuse.
+
+

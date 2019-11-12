@@ -1,0 +1,36 @@
+SHORT Data cache miss rate/ratio
+
+EVENTSET
+FIXC0 INSTR_RETIRED_ANY
+FIXC1 CPU_CLK_UNHALTED_CORE
+FIXC2 CPU_CLK_UNHALTED_REF
+PMC0  L1D_REPL
+PMC1  L1D_ALL_REF_ANY
+
+METRICS
+Runtime (RDTSC) [s] time
+Runtime unhalted [s] FIXC1*inverseClock
+Clock [MHz]  1.E-06*(FIXC1/FIXC2)/inverseClock
+CPI  FIXC1/FIXC0
+data cache misses PMC0
+data cache request rate PMC1/FIXC0
+data cache miss rate PMC0/FIXC0
+data cache miss ratio PMC0/PMC1
+
+LONG
+Formulas:
+data cache misses = L1D_REPL
+data cache request rate =  L1D_ALL_REF_ANY / INSTR_RETIRED_ANY
+data cache miss rate = L1D_REPL / INSTR_RETIRED_ANY
+data cache miss ratio =  L1D_REPL / L1D_ALL_REF_ANY
+-
+This group measures the locality of your data accesses with regard to the
+L1 cache. Data cache request rate tells you how data intensive your code is
+or how many data accesses you have on average per instruction.
+The data cache miss rate gives a measure how often it was necessary to get
+cache lines from higher levels of the memory hierarchy. And finally
+data cache miss ratio tells you how many of your memory references required
+a cache line to be loaded from a higher level. While the data cache miss rate
+might be given by your algorithm you should try to get data cache miss ratio
+as low as possible by increasing your cache reuse.
+

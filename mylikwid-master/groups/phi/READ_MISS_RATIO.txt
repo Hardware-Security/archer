@@ -1,0 +1,15 @@
+SHORT Miss ratio fof data reads
+
+EVENTSET
+PMC0  DATA_READ
+PMC1  DATA_READ_MISS
+
+METRICS
+Runtime (RDTSC) [s] time
+Read miss ratio PMC1/PMC0
+
+LONG
+Formulas:
+Read miss ratio = DATA_READ_MISS/DATA_READ
+--
+Miss ratio for data reads.
