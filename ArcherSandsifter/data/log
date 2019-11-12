@@ -1,0 +1,20 @@
+#
+# sifter.py --unk --dis --len --sync --tick -- -P1 -t
+# ./injector -P1 -t -t -R -0 -s 2613859553
+#
+# insn tested: 39217
+# artf found:  0
+# runtime:     00:00:03.31
+# seed:        2613859553
+# arch:        64
+# date:        2019-08-13 01:10:13
+#
+# cpu:
+# processor	: 0
+# vendor_id	: GenuineIntel
+# cpu family	: 6
+# model		: 69
+# model name	: Intel(R) Core(TM) i7-4510U CPU @ 2.00GHz
+# stepping	: 1
+# microcode	: 0x24
+#                               v  l  s  c
