@@ -1,0 +1,14 @@
+make -C /lib/modules/4.18.0-25-generic/build M=/home/mohammad/Desktop/driver_programming/usb-data-transfer modules
+make[1]: Entering directory '/usr/src/linux-headers-4.18.0-25-generic'
+  CC [M]  /home/mohammad/Desktop/driver_programming/usb-data-transfer/cp210x.o
+scripts/Makefile.build:330: recipe for target '/home/mohammad/Desktop/driver_programming/usb-data-transfer/cp210x.o' failed
+Makefile:1534: recipe for target '_module_/home/mohammad/Desktop/driver_programming/usb-data-transfer' failed
+make[1]: Leaving directory '/usr/src/linux-headers-4.18.0-25-generic'
+Makefile:12: recipe for target 'default' failed
+make -C /lib/modules/4.18.0-25-generic/build M=/home/mohammad/Desktop/driver_programming/usb-data-transfer modules
+make[1]: Entering directory '/usr/src/linux-headers-4.18.0-25-generic'
+  CC [M]  /home/mohammad/Desktop/driver_programming/usb-data-transfer/cp210x.o
+scripts/Makefile.build:330: recipe for target '/home/mohammad/Desktop/driver_programming/usb-data-transfer/cp210x.o' failed
+Makefile:1534: recipe for target '_module_/home/mohammad/Desktop/driver_programming/usb-data-transfer' failed
+make[1]: Leaving directory '/usr/src/linux-headers-4.18.0-25-generic'
+Makefile:12: recipe for target 'default' failed
