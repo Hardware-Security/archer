@@ -49,7 +49,9 @@ It's really recommended to use the instruction from the processor you're testing
 
 In the second place you have to create database tables for saving the results of the analyzer. Install `mysql` and use the SQL file in `archer/ArcherDatabases/` to build the new database.
 
-`sudo apt-get update`
-`sudo apt-get install mysql-server`
+```
+sudo apt-get update
+sudo apt-get install mysql-server
+```
 
 
