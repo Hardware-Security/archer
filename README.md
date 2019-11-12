@@ -43,7 +43,9 @@ As it's not possible to manage exceptions when we use `ArcherMSRManager`, we use
 # Usage 
 In order to use archer, first thing you need is finding all the instructions, goto `ArcherSandsifter` and run it as described in the folder itself.
 
-`sudo ./sifter.py --unk --dis --len --sync --tick -- -P1 -t`
+```
+sudo ./sifter.py --unk --dis --len --sync --tick -- -P1 -t
+```
 
 It's really recommended to use the instruction from the processor you're testing on as there are other instructions based on your microarchitecture but in the case if you want to use the previously brute-forced results, you can use the `archer/ArcherSampleResults/instructions.json.zip`, don't forget to decompress it first.
 
