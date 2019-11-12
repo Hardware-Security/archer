@@ -54,4 +54,9 @@ sudo apt-get update
 sudo apt-get install mysql-server
 ```
 
+Third, you have to use `ArcherLikwid`, using arhcer likwid you have to replace `instructions.json` with the instruction path from `ArcherSandsifter`.
 
+After that, run it using the following command.
+```
+python json_llikwid.py	
+```
