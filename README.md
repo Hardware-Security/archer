@@ -62,3 +62,27 @@ After that, run it using the following command.
 ```
 python json_llikwid.py	
 ```
+
+Fourth, you need to run `ArcherNanobench`, open the `Integrator.py` and change the following lines to your specific details for mysql, replace your server ip address with `IpHere` and replace mysql username to `UserHere` and mysql user password with `PasswordHere` and name of the database to `DatabaseHere`.
+
+The last step here is add the path to instructions from `ArcherSandsifter` to `filepath`.
+```
+mydb = mysql.connector.connect(
+  host="IpHere",
+  user="UserHere",
+  passwd="PasswordHere",
+  database="DatabaseHere"
+)
+filepath = 'Path to instructions Json'
+```
+
+and finally run it using :
+```
+python Integrator.py	
+```
+
+Fifth, you can use `GetTableFromResultsToHTML.py` in `Hardware-Security/archer` to get the results.
+```
+python GetTableFromResultsToHTML.py	
+```
+
