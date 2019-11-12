@@ -20,16 +20,16 @@ learning  approaches  to  find  the  origin  of  the  changes;  then we  try  to
 # Projects 
 
 ## ArcherDatabases
-This directory contains the SQL definition (`.sql` file) in order to create database (tables) for storing the results of the analyzer. There is also `GetTableFromResultsToHTML.py` which converts the database results into a human readable HTML Table.
+This directory contains the SQL definition (`.sql` file) in order to create the database (tables) for storing the results of the analyzer. There is also `GetTableFromResultsToHTML.py` which converts the database results into a human-readable HTML Table.
 
 ## ArcherLikwid
 `ArcherLikwid` is customized build of the Likwid designed to use Hardware Performance Counters and combine all the possible HPCs with Intel TSX (Intel Transactional Synchronization Extensions Technology), it reads the possible instruction from the results of ArcherSandsifter.
 
 ## ArcherMSRManager
-`ArcherMSRManager` is used to brute-force over MSRs in order to find new instruction which appears in the result of activating a MSR bit and finding the odd behaviors over the different MSRs. It uses `ArcherTransferOverUSB` as the transfer module to send the data about MSRs into database.
+`ArcherMSRManager` is used to brute-force over MSRs in order to find new instruction which appears in the result of activating a MSR bit and finding the odd behaviors over the different MSRs. It uses `ArcherTransferOverUSB` as the transfer module to send the data about MSRs into the database.
 
 ## ArcherNanoBench
-Our archer uses `NanoBench (uops.info)` as a vector combined with results of our customized likwid to find the behavior of each instruction in architectural level of Intel processors, we combined NanoBench with Intel TSX in order to find the behavior of unknown instructions from our instruction brute-forcer.
+Our archer uses `NanoBench (uops.info)` as a vector combined with the results of our customized likwid to find the behavior of each instruction in the architectural level of Intel processors, we combined NanoBench with Intel TSX in order to find the behavior of unknown instructions from our instruction brute-forcer.
 
 ## ArcherSampleResults
 In this directory, we store some sample results. For instance, you can find the instruction mnemonics and hex representation of instructions in sample Intel processors.
@@ -41,7 +41,7 @@ This project is customized version of `sandsifter` which aims to collect all of 
 As it's not possible to manage exceptions when we use `ArcherMSRManager`, we use this project to send the data out from a linux machine then restore the previous system state.
 
 # Usage 
-In order to use archer, first thing you need is finding all the instructions, goto `ArcherSandsifter` and run it as described in the folder itself.
+In order to use archer, the first thing you need is finding all the instructions, goto `ArcherSandsifter` and run it as described in the folder itself.
 
 ```
 sudo ./sifter.py --unk --dis --len --sync --tick -- -P1 -t
